@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>NovoVoice</title>
+    <style>
+        /* 
+         * NOVOVOICE - DESIGN SYSTEM 
+         */
+        :root {
+            --bg-color: #FDFCF8;         /* Warm Cream */
+            --card-bg: #FFFFFF;          /* Pure White */
+            --text-primary: #1F2937;     /* Soft Charcoal */
+            --text-secondary: #6B7280;   /* Muted Grey */
+            --accent-color: #1E3A8A;     /* Deep Navy Blue */
+            --accent-light: #2C4269;     /* Lighter Navy */
+            --accent-bg: #EFF6FF;        /* Very light blue for active states */
+            --border-color: #E5E7EB;     /* Light Grey */
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 10px;
+            --shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-color);
+            font-family: var(--font-family);
+            color: var(--text-primary);
+            min-height: 100vh;
+            /* Changed from flex-center to block with auto margin to prevent top clipping */
+            padding: max(40px, env(safe-area-inset-top)) 20px 40px 20px;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 550px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        header { 
+            text-align: center; 
+            margin-bottom: 30px; 
+            padding: 0 10px;
+        }
+        h1 {
+            font-size: 1.85rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+        .subtitle {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        /* Main Card */
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: 32px 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(0,0,0,0.03);
+        }
+
+        /* Section Titles */
+        .section-label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            margin-top: 28px;
+        }
+        .section-label:first-of-type { margin-top: 0; }
+
+        /* Text Area */
+        .input-group { position: relative; }
+        textarea {
+            width: 100%;
+            height: 140px;
+            padding: 16px;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            background: #FAFAFA;
+            font-family: inherit;
+            font-size: 1.05rem;
+            line-height: 1.5;
+            resize: none;
+            outline: none;
+            transition: all 0.2s;
+            color: var(--text-primary);
+            -webkit-appearance: none;
+        }
+        textarea:focus {
+            background: #FFF;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 4px var(--accent-bg);
+        }
+        textarea::placeholder { color: #9CA3AF; }
+        
+        .textarea-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 8px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Controls */
+        
+        /* Voice Select - Styled Custom */
+        .voice-select-wrapper {
+            position: relative;
+        }
+        .voice-select-wrapper::after {
+            content: '';
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 10px;
+            height: 10px;
+            border-right: 2px solid var(--text-secondary);
+            border-bottom: 2px solid var(--text-secondary);
+            rotate: 45deg;
+            pointer-events: none;
+        }
+        select#voiceSelect {
+            width: 100%;
+            padding: 14px 16px;
+            padding-right: 40px;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            background-color: #FFF;
+            font-size: 1rem;
+            color: var(--text-primary);
+            cursor: pointer;
+            outline: none;
+            -webkit-appearance: none; /* Remove native arrow */
+            appearance: none;
+        }
+        select#voiceSelect:focus { border-color: var(--accent-color); }
+
+        /* Style Chips (Replacing Dropdown) */
+        .style-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .chip {
+            border: 1px solid var(--border-color);
+            background: #FFF;
+            padding: 10px 18px;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .chip:hover {
+            background: #F3F4F6;
+        }
+        .chip.active {
+            background: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+            box-shadow: 0 4px 6px rgba(30, 58, 138, 0.2);
+        }
+
+        /* Sliders */
+        .sliders-section {
+            background: #F8FAFC;
+            padding: 24px;
+            border-radius: var(--radius-md);
+            margin-top: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        .slider-row { display: flex; flex-direction: column; gap: 10px; }
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .val-display {
+            color: var(--accent-color);
+            font-family: monospace;
+            font-weight: 700;
+        }
+        
+        /* Custom Range Input */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+            margin: 8px 0;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 24px;
+            width: 24px;
+            border-radius: 50%;
+            background: #FFF;
+            border: 6px solid var(--accent-color);
+            cursor: pointer;
+            margin-top: -10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: transform 0.1s;
+        }
+        input[type=range]::-webkit-slider-thumb:active { transform: scale(1.1); }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            background: #CBD5E1;
+            border-radius: 2px;
+        }
+
+        /* Status & Buttons */
+        .status-area {
+            margin-top: 24px;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+        .status-pill {
+            display: inline-block;
+            background: #F3F4F6;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 18px;
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.1s, background 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            box-shadow: 0 4px 12px rgba(30, 58, 138, 0.25);
+        }
+        .btn-primary:hover { background: var(--accent-light); }
+        .btn-primary:active { transform: scale(0.98); }
+
+        /* Animations */
+        @keyframes wave {
+            0%, 100% { height: 6px; }
+            50% { height: 14px; }
+        }
+        .audio-bars {
+            display: none;
+            align-items: center;
+            gap: 3px;
+            height: 14px;
+        }
+        .bar {
+            width: 3px;
+            background: white;
+            border-radius: 2px;
+            animation: wave 0.8s infinite ease-in-out;
+        }
+        .bar:nth-child(2) { animation-delay: 0.1s; }
+        .bar:nth-child(3) { animation-delay: 0.2s; }
+        
+        .btn-primary.speaking .audio-bars { display: flex; }
+        .btn-primary.speaking .icon-play { display: none; }
+        
+        .error-msg {
+            color: #DC2626;
+            font-size: 0.85rem;
+            text-align: center;
+            margin-top: 16px;
+            display: none;
+            background: #FEF2F2;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        /* Mobile tweaks */
+        @media (max-width: 480px) {
+            .card { padding: 24px 20px; }
+            h1 { font-size: 1.6rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <header>
+        <h1>NovoVoice</h1>
+        <p class="subtitle">Natural text-to-speech directly in your browser</p>
+    </header>
+
+    <main class="card">
+        <!-- Text Input -->
+        <label class="section-label">Your Text</label>
+        <div class="input-group">
+            <textarea id="textInput" placeholder="Enter your text here..." maxlength="1000">Hello! I can read your text with different simulated styles. Try selecting 'Friendly' or 'Narrator'.</textarea>
+            <div class="textarea-footer">
+                <span>Try a short sentence first.</span>
+                <span id="charCount">0 / 1000</span>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <label class="section-label">Voice Selection</label>
+        <div class="voice-select-wrapper">
+            <select id="voiceSelect">
+                <option value="">Loading voices...</option>
+            </select>
+        </div>
+
+        <label class="section-label">Simulated Style</label>
+        <div class="style-chips" id="styleOptions">
+            <button class="chip active" data-style="neutral">Neutral</button>
+            <button class="chip" data-style="friendly">Friendly</button>
+            <button class="chip" data-style="excited">Excited</button>
+            <button class="chip" data-style="narrator">Narrator</button>
+            <button class="chip" data-style="sad">Sad</button>
+        </div>
+
+        <!-- Sliders -->
+        <div class="sliders-section">
+            <div class="slider-row">
+                <div class="slider-header">
+                    <span>Pitch</span>
+                    <span id="valPitch" class="val-display">1.0</span>
+                </div>
+                <input type="range" id="pitch" min="0.5" max="2" step="0.1" value="1">
+            </div>
+            
+            <div class="slider-row">
+                <div class="slider-header">
+                    <span>Speed</span>
+                    <span id="valSpeed" class="val-display">1.0x</span>
+                </div>
+                <input type="range" id="rate" min="0.5" max="2" step="0.1" value="1">
+            </div>
+
+            <div class="slider-row">
+                <div class="slider-header">
+                    <span>Volume</span>
+                    <span id="valVolume" class="val-display">100%</span>
+                </div>
+                <input type="range" id="volume" min="0" max="1" step="0.1" value="1">
+            </div>
+        </div>
+
+        <div class="status-area">
+            <span class="status-pill" id="statusPill">Ready to speak</span>
+        </div>
+
+        <button id="speakBtn" class="btn-primary">
+            <span class="icon-play">▶</span>
+            <div class="audio-bars">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
+            <span id="btnText" style="margin-left:8px">Speak Text</span>
+        </button>
+        <p class="error-msg" id="errorMsg"></p>
+    </main>
+</div>
+
+<script>
+    // --- State & Config ---
+    const synth = window.speechSynthesis;
+    let voices = [];
+    let isSpeaking = false;
+    let currentStyle = 'neutral';
+
+    // DOM Elements
+    const textInput = document.getElementById('textInput');
+    const charCount = document.getElementById('charCount');
+    const voiceSelect = document.getElementById('voiceSelect');
+    const styleChips = document.querySelectorAll('.chip');
+    const pitchInput = document.getElementById('pitch');
+    const rateInput = document.getElementById('rate');
+    const volumeInput = document.getElementById('volume');
+    const valPitch = document.getElementById('valPitch');
+    const valSpeed = document.getElementById('valSpeed');
+    const valVolume = document.getElementById('valVolume');
+    const speakBtn = document.getElementById('speakBtn');
+    const btnText = document.getElementById('btnText');
+    const statusPill = document.getElementById('statusPill');
+    const errorMsg = document.getElementById('errorMsg');
+
+    // Style Presets (Simulating emotions via Pitch/Rate)
+    const STYLES = {
+        neutral: { pitch: 1.0, rate: 1.0 },
+        friendly: { pitch: 1.2, rate: 1.1 },
+        excited: { pitch: 1.4, rate: 1.2 },
+        narrator: { pitch: 0.8, rate: 0.9 },
+        sad: { pitch: 0.6, rate: 0.8 }
+    };
+
+    // --- Initialization ---
+
+    function loadVoices() {
+        voices = synth.getVoices();
+        
+        // Filter and Sort
+        voices.sort((a, b) => a.name.localeCompare(b.name));
+
+        // Save current selection to restore after reload
+        const currentVal = voiceSelect.value;
+        voiceSelect.innerHTML = '';
+        
+        if (voices.length === 0) {
+            const op = document.createElement('option');
+            op.text = "No voices found (Try refreshing)";
+            voiceSelect.add(op);
+            return;
+        }
+
+        voices.forEach(voice => {
+            const option = document.createElement('option');
+            let prefix = '';
+            const lowerName = voice.name.toLowerCase();
+            if (lowerName.includes('female') || lowerName.includes('zira') || lowerName.includes('samantha')) prefix = '♀ ';
+            else if (lowerName.includes('male') || lowerName.includes('david')) prefix = '♂ ';
+            
+            option.textContent = `${prefix}${voice.name} (${voice.lang})`;
+            option.value = voice.name;
+            voiceSelect.appendChild(option);
+        });
+
+        if(currentVal) voiceSelect.value = currentVal;
+    }
+
+    loadVoices();
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = loadVoices;
+    }
+
+    // --- UI Interactions ---
+
+    // 1. Text Counter
+    textInput.addEventListener('input', () => {
+        charCount.textContent = `${textInput.value.length} / 1000`;
+    });
+
+    // 2. Style Chips Logic
+    styleChips.forEach(chip => {
+        chip.addEventListener('click', () => {
+            // Remove active class from all
+            styleChips.forEach(c => c.classList.remove('active'));
+            // Add to clicked
+            chip.classList.add('active');
+            
+            const styleName = chip.dataset.style;
+            currentStyle = styleName;
+            const settings = STYLES[styleName];
+            
+            // Update Sliders
+            pitchInput.value = settings.pitch;
+            rateInput.value = settings.rate;
+            
+            updateSliderLabels();
+            statusPill.textContent = `Applied ${styleName} style`;
+        });
+    });
+
+    // 3. Slider Updates
+    [pitchInput, rateInput, volumeInput].forEach(input => {
+        input.addEventListener('input', () => {
+            updateSliderLabels();
+            // Reset style chips visual if user tweaks manually
+            statusPill.textContent = `Custom: Pitch ${pitchInput.value}, Speed ${rateInput.value}`;
+        });
+    });
+
+    function updateSliderLabels() {
+        valPitch.textContent = pitchInput.value;
+        valSpeed.textContent = rateInput.value + 'x';
+        valVolume.textContent = Math.round(volumeInput.value * 100) + '%';
+    }
+
+    // --- Speech Logic ---
+
+    speakBtn.addEventListener('click', () => {
+        if (synth.speaking) {
+            synth.cancel();
+            if (isSpeaking) {
+                resetUI();
+                return;
+            }
+        }
+
+        const text = textInput.value;
+        if (!text.trim()) {
+            showError("Please enter some text to speak.");
+            return;
+        }
+        showError(""); 
+
+        const utterThis = new SpeechSynthesisUtterance(text);
+        
+        const selectedVoiceName = voiceSelect.value;
+        const selectedVoice = voices.find(v => v.name === selectedVoiceName);
+        if (selectedVoice) {
+            utterThis.voice = selectedVoice;
+        }
+
+        utterThis.pitch = parseFloat(pitchInput.value);
+        utterThis.rate = parseFloat(rateInput.value);
+        utterThis.volume = parseFloat(volumeInput.value);
+
+        utterThis.onstart = () => {
+            isSpeaking = true;
+            speakBtn.classList.add('speaking');
+            btnText.textContent = "Stop";
+            statusPill.textContent = "Speaking...";
+        };
+
+        utterThis.onend = () => {
+            resetUI();
+            statusPill.textContent = "Finished";
+            setTimeout(() => {
+                if(!isSpeaking) statusPill.textContent = "Ready to speak";
+            }, 2000);
+        };
+
+        utterThis.onerror = (e) => {
+            console.error(e);
+            resetUI();
+            // Some browsers fire error on manual cancel, ignore that
+            if (e.error !== 'interrupted' && e.error !== 'canceled') {
+                showError("An error occurred during playback.");
+            }
+        };
+
+        synth.speak(utterThis);
+    });
+
+    function resetUI() {
+        isSpeaking = false;
+        speakBtn.classList.remove('speaking');
+        btnText.textContent = "Speak Text";
+    }
+
+    function showError(msg) {
+        errorMsg.textContent = msg;
+        errorMsg.style.display = msg ? 'block' : 'none';
+    }
+
+    updateSliderLabels();
+
+</script>
+</body>
+</html>

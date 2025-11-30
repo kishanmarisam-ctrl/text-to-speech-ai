@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to Speech - ElevenLabs Clone</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="navbar">
+        <div class="nav-content">
+            <div class="nav-left">
+                <span class="logo-text">Text to Speech</span>
+            </div>
+            <!-- Right side intentionally empty per requirements -->
+        </div>
+    </header>
+
+    <div class="app-layout">
+        
+        <!-- LEFT COLUMN: Input Area -->
+        <main class="left-column">
+            <div class="textarea-container">
+                <textarea id="textInput" placeholder="Start typing here or paste any text you want to turn into lifelike speech..." maxlength="2000"></textarea>
+                <div class="textarea-footer">
+                    <span id="charCount">0 / 2000</span>
+                </div>
+            </div>
+
+            <!-- Get Started Chips -->
+            <div class="suggestions-area">
+                <label class="section-label">Get started with</label>
+                <div class="chip-row">
+                    <button class="chip" data-preset="story">Narrate a story</button>
+                    <button class="chip" data-preset="joke">Tell a silly joke</button>
+                    <button class="chip" data-preset="ad">Record an advertisement</button>
+                    <button class="chip" data-preset="lang">Speak in different languages</button>
+                    <button class="chip" data-preset="drama">Direct a dramatic movie scene</button>
+                    <button class="chip" data-preset="game">Hear from a video game character</button>
+                    <button class="chip" data-preset="podcast">Introduce your podcast</button>
+                    <button class="chip" data-preset="meditation">Guide a meditation class</button>
+                </div>
+            </div>
+        </main>
+
+        <!-- RIGHT COLUMN: Settings Panel -->
+        <aside class="right-column">
+            <div class="panel-card">
+                
+                <!-- Tabs -->
+                <div class="tabs-header">
+                    <button id="tabSettings" class="tab-btn active">Settings</button>
+                    <button id="tabHistory" class="tab-btn">History</button>
+                </div>
+
+                <!-- SETTINGS TAB CONTENT -->
+                <div id="contentSettings" class="tab-content active">
+                    
+                    <!-- 1. Voice Selector -->
+                    <div class="control-row">
+                        <label>Voice</label>
+                        <button id="voiceSelectBtn" class="selector-btn">
+                            <div class="selector-left">
+                                <div id="selectedVoiceAvatar" class="avatar-sm">?</div>
+                                <span id="selectedVoiceName">Select a voice...</span>
+                            </div>
+                            <span class="chevron">›</span>
+                        </button>
+                    </div>
+
+                    <!-- 2. Model Selector -->
+                    <div class="control-row">
+                        <label>Model</label>
+                        <div id="modelCard" class="model-card">
+                            <div class="model-info">
+                                <span id="modelBadge" class="badge">V2</span>
+                                <div class="model-text">
+                                    <span id="modelLabel" class="model-name">Eleven Multilingual v2</span>
+                                    <span id="modelDesc" class="model-desc">The most expressive Text to Speech</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. Sliders -->
+                    <div class="sliders-group">
+                        
+                        <!-- Speed -->
+                        <div class="slider-row">
+                            <div class="slider-header">
+                                <label>Speed</label>
+                                <span id="valSpeed" class="val-display">1.0x</span>
+                            </div>
+                            <div class="slider-sub">
+                                <span>Slower</span><span>Faster</span>
+                            </div>
+                            <input type="range" id="sliderSpeed" min="0.5" max="2.0" step="0.05" value="1.0">
+                        </div>
+
+                        <!-- Stability -->
+                        <div class="slider-row">
+                            <div class="slider-header">
+                                <label>Stability</label>
+                                <span id="valStability" class="val-display">0.50</span>
+                            </div>
+                            <div class="slider-sub">
+                                <span>More variable</span><span>More stable</span>
+                            </div>
+                            <input type="range" id="sliderStability" min="0" max="1" step="0.01" value="0.5">
+                        </div>
+
+                        <!-- Similarity -->
+                        <div class="slider-row">
+                            <div class="slider-header">
+                                <label>Similarity</label>
+                                <span id="valSimilarity" class="val-display">0.75</span>
+                            </div>
+                            <div class="slider-sub">
+                                <span>Low</span><span>High</span>
+                            </div>
+                            <input type="range" id="sliderSimilarity" min="0" max="1" step="0.01" value="0.75">
+                        </div>
+
+                        <!-- Style Exaggeration -->
+                        <div class="slider-row">
+                            <div class="slider-header">
+                                <label>Style Exaggeration</label>
+                                <span id="valStyle" class="val-display">0.00</span>
+                            </div>
+                            <div class="slider-sub">
+                                <span>None</span><span>Exaggerated</span>
+                            </div>
+                            <input type="range" id="sliderStyle" min="0" max="1" step="0.01" value="0.0">
+                        </div>
+
+                    </div>
+
+                    <!-- 4. Language Override -->
+                    <div class="control-row override-row">
+                        <div class="override-header">
+                            <label class="dotted-underline" title="Manually enforce a language">Language Override</label>
+                            <label class="switch">
+                                <input type="checkbox" id="langToggle">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                        <div id="langDropdownContainer" class="hidden">
+                            <select id="langSelect" class="lang-select">
+                                <option value="auto">Auto</option>
+                                <option value="en">English</option>
+                                <option value="ja">Japanese</option>
+                                <option value="zh">Chinese</option>
+                                <option value="de">German</option>
+                                <option value="hi">Hindi</option>
+                                <option value="fr">French</option>
+                                <option value="ko">Korean</option>
+                                <option value="pt">Portuguese</option>
+                                <option value="it">Italian</option>
+                                <option value="es">Spanish</option>
+                                <option value="id">Indonesian</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- 5. Generate Button -->
+                    <div class="generate-area">
+                        <button id="btnGenerate" class="btn-primary">Generate</button>
+                        <div id="errorMsg" class="error-msg hidden"></div>
+                        <!-- Hidden main audio player -->
+                        <audio id="mainAudio" hidden></audio>
+                    </div>
+
+                </div>
+
+                <!-- HISTORY TAB CONTENT -->
+                <div id="contentHistory" class="tab-content">
+                    <div id="historyList" class="history-list">
+                        <div class="empty-state">No history yet.</div>
+                    </div>
+                </div>
+
+            </div>
+        </aside>
+
+    </div>
+
+    <!-- VOICE LIBRARY MODAL -->
+    <div id="voiceModal" class="modal-overlay hidden">
+        <div class="modal-panel">
+            <div class="modal-header">
+                <h2>Select a voice</h2>
+                <button id="btnCloseModal" class="btn-close">×</button>
+            </div>
+            
+            <div class="modal-content">
+                <!-- Promo Card -->
+                <div class="modal-promo">
+                    <div class="promo-icon">✨</div>
+                    <div class="promo-text">
+                        <h3>Explore Voice Library</h3>
+                        <p>Find high quality voices from the community.</p>
+                    </div>
+                </div>
+
+                <!-- Search -->
+                <div class="search-row">
+                    <input type="text" id="voiceSearch" placeholder="Search voices...">
+                </div>
+
+                <!-- Fake Dropdown -->
+                <button class="filter-btn">All saved voices ▾</button>
+
+                <!-- Voice List -->
+                <div id="voiceList" class="voice-list">
+                    <div class="loading-text">Loading voices...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODEL PICKER MODAL (Simple) -->
+    <div id="modelModal" class="modal-overlay hidden">
+        <div class="modal-panel small-modal">
+            <div class="modal-header">
+                <h2>Select Model</h2>
+                <button id="btnCloseModelModal" class="btn-close">×</button>
+            </div>
+            <div id="modelList" class="model-list">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden Audio for Previews -->
+    <audio id="previewAudio" hidden></audio>
+
+    <script src="main.js"></script>
+</body>
+</html>

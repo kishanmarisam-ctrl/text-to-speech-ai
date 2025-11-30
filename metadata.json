@@ -1,0 +1,5 @@
+{
+  "name": "NovoVoice",
+  "description": "A natural, human-centric text-to-speech generator running entirely in the browser using the Web Speech API.",
+  "requestFramePermissions": []
+}
